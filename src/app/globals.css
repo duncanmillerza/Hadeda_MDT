@@ -1,26 +1,163 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --radius: 0.625rem;
+
+  /* HadedaHealth brand colors - OKLCH primary with HSL/HEX fallbacks */
+  --color-primary: oklch(0.4587 0.0617 175.54); /* Hadeda Green - perceptually uniform */
+  --color-primary-foreground: oklch(1 0 0); /* White */
+  --color-secondary: oklch(0.35 0.08 240); /* Healthcare Blue */
+  --color-secondary-foreground: oklch(1 0 0); /* White */
+  --color-destructive: oklch(0.48 0.15 14); /* Medical Rose */
+  --color-destructive-foreground: oklch(1 0 0); /* White */
+  --color-success: oklch(0.55 0.15 145); /* Success Green */
+  --color-warning: oklch(0.65 0.15 50); /* Warning Orange */
+
+  /* Light theme semantic colors */
+  --color-background: oklch(1 0 0); /* Pure white */
+  --color-foreground: oklch(0.2 0.02 240); /* Very dark gray */
+  --color-card: oklch(0.98 0.005 240); /* Very light gray */
+  --color-card-foreground: oklch(0.2 0.02 240);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.2 0.02 240);
+  --color-muted: oklch(0.96 0.01 240);
+  --color-muted-foreground: oklch(0.55 0.015 240);
+  --color-accent: oklch(0.96 0.01 240);
+  --color-accent-foreground: oklch(0.2 0.02 240);
+  --color-border: oklch(0.91 0.005 240);
+  --color-input: oklch(0.91 0.005 240);
+  --color-ring: oklch(0.35 0.08 164); /* Primary for focus rings */
+
+  /* Navbar colors - light theme uses primary green */
+  --color-navbar: var(--color-primary);
+  --color-navbar-foreground: var(--color-primary-foreground);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.dark {
+  /* Dark mode overrides - semantic tokens only */
+  --color-background: oklch(0.08 0.005 240); /* Very dark blue-gray */
+  --color-foreground: oklch(0.98 0.005 240); /* Near white */
+  --color-card: oklch(0.13 0.01 240); /* Dark gray-blue */
+  --color-card-foreground: oklch(0.98 0.005 240);
+  --color-popover: oklch(0.15 0.01 240);
+  --color-popover-foreground: oklch(0.98 0.005 240);
+  --color-muted: oklch(0.15 0.01 240);
+  --color-muted-foreground: oklch(0.85 0.005 240);
+  --color-accent: oklch(0.23 0.01 240);
+  --color-accent-foreground: oklch(0.98 0.005 240);
+  --color-secondary: oklch(0.68 0.15 240); /* Brighter blue for visibility */
+  --color-destructive: oklch(0.65 0.2 15); /* Brighter rose for visibility */
+  --color-border: oklch(0.23 0.01 240);
+  --color-input: oklch(0.23 0.01 240);
+
+  /* Navbar colors - dark theme uses dark blue-gray */
+  --color-navbar: oklch(0.15 0.02 240); /* Dark blue-gray */
+  --color-navbar-foreground: oklch(0.98 0.005 240); /* Near white */
+}
+
+:root {
+  /* HSL fallback system for Tailwind CSS custom properties */
+  /* Core Brand Colors - HSL format for compatibility */
+  --hadeda-green: 164 45% 29%;       /* #2D6356 - Primary brand color */
+  --healthcare-blue: 217 43% 33%;    /* #32517A - Secondary actions */
+  --medical-rose: 345 47% 33%;       /* #96364C - Destructive actions */
+  --success-green: 145 63% 42%;      /* Success state */
+  --warning-orange: 38 92% 50%;      /* Warning state - orange */
+
+  /* Light mode semantic tokens - HSL format */
+  --background: 0 0% 100%;           /* White */
+  --foreground: 222 84% 15%;         /* Very dark gray */
+  --card: 210 17% 98%;               /* Very light gray */
+  --card-foreground: 222 84% 15%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 84% 15%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 220 14% 96%;
+  --accent-foreground: 222 84% 15%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+
+  /* Semantic mapping to brand colors */
+  --primary: var(--hadeda-green);
+  --primary-foreground: 0 0% 100%;
+  --secondary: var(--healthcare-blue);
+  --secondary-foreground: 0 0% 100%;
+  --destructive: var(--medical-rose);
+  --destructive-foreground: 0 0% 100%;
+  --success: var(--success-green);
+  --warning: var(--warning-orange);
+  --ring: var(--hadeda-green);
+
+  /* Navbar colors - light theme HSL fallback */
+  --navbar: var(--hadeda-green);
+  --navbar-foreground: 0 0% 100%;
+
+  /* Chart colors for data visualization */
+  --chart-1: var(--hadeda-green);
+  --chart-2: var(--healthcare-blue);
+  --chart-3: 262 83% 58%;            /* Purple */
+  --chart-4: 142 76% 36%;            /* Green variant */
+  --chart-5: 346 84% 61%;            /* Pink */
+}
+
+.dark {
+  /* Dark mode HSL overrides */
+  --background: 200 33% 5%;          /* Very dark blue-gray */
+  --foreground: 210 17% 98%;         /* Near white */
+  --card: 222 22% 13%;               /* Dark gray-blue */
+  --card-foreground: 210 17% 98%;
+  --popover: 215 28% 17%;
+  --popover-foreground: 210 17% 98%;
+  --muted: 215 28% 17%;
+  --muted-foreground: 214 32% 91%;
+  --accent: 217 32% 23%;
+  --accent-foreground: 210 17% 98%;
+  --border: 217 32% 23%;
+  --input: 217 32% 23%;
+
+  /* Brand colors remain consistent, secondary brightened for visibility */
+  --primary: var(--hadeda-green);    /* Consistent branding */
+  --secondary: 213 94% 68%;          /* Brighter blue for dark mode */
+  --destructive: 345 84% 61%;        /* Brighter rose for dark mode */
+
+  /* Navbar colors - dark theme HSL fallback */
+  --navbar: 240 43% 15%;             /* Dark blue-gray */
+  --navbar-foreground: 210 17% 98%;  /* Near white */
+
+  /* Dark mode chart colors */
+  --chart-2: 213 94% 68%;            /* Light blue */
+  --chart-3: 262 83% 68%;            /* Light purple */
+  --chart-4: 142 69% 58%;            /* Light green */
+  --chart-5: 346 84% 71%;            /* Light pink */
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+    outline-color: hsl(var(--ring) / 0.5);
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Primary button hover - lighter green in dark mode */
+  .dark [data-variant="default"]:hover {
+    background-color: hsl(164 35% 35%); /* Lighter Hadeda green */
+  }
+
+  /* Improved number/metric styling */
+  .metric-number {
+    @apply text-2xl font-bold tracking-tight;
+  }
+
+  .metric-large {
+    @apply text-3xl font-bold tracking-tight;
+  }
 }
