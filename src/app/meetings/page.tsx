@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
 
+import { MeetingForm } from './_components/meeting-form'
+
 export const metadata = {
   title: 'Meetings • HadedaHealth MDT',
 }
@@ -22,9 +24,11 @@ export default async function MeetingsPage() {
             Review upcoming and past meetings, or create a new agenda.
           </p>
         </div>
-        <Button variant="secondary" disabled>
-          Create meeting (coming soon)
-        </Button>
+        <MeetingForm
+          trigger={
+            <Button variant="secondary">Create meeting</Button>
+          }
+        />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

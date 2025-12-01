@@ -138,21 +138,56 @@ export function MeetingItemCard({ item }: MeetingItemCardProps) {
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <Label>Notes</Label>
-            <Badge variant="outline">Coming soon</Badge>
+            <Badge variant="outline">{item.notes.length}</Badge>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Note capture will appear here once the note editor is implemented.
-          </p>
+          {item.notes.length ? (
+            <div className="space-y-2">
+              {item.notes.map(note => (
+                <div key={note.id} className="rounded-md border border-border/60 bg-muted/30 p-3 text-sm">
+                  <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
+                    <span>{note.author?.name ?? 'Unknown author'}</span>
+                    <span>{format(note.createdAt, 'PPp')}</span>
+                  </div>
+                  <p className="whitespace-pre-line text-sm text-foreground">{note.body}</p>
+                  <Badge variant="secondary" className="mt-2 text-xs uppercase tracking-wide">
+                    {note.category.replace('_', ' ')}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No notes captured yet.</p>
+          )}
         </section>
 
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <Label>Tasks</Label>
-            <Badge variant="outline">Coming soon</Badge>
+            <Badge variant="outline">{item.tasks.length}</Badge>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Task assignment will be available once the task form is complete.
-          </p>
+          {item.tasks.length ? (
+            <div className="space-y-2 text-sm">
+              {item.tasks.map(task => (
+                <div key={task.id} className="rounded-md border border-border/60 bg-muted/30 p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+                    <span>{task.title}</span>
+                    <Badge variant="outline">{task.status.replace('_', ' ')}</Badge>
+                  </div>
+                  {task.description ? (
+                    <p className="mt-2 whitespace-pre-line text-sm text-foreground">
+                      {task.description}
+                    </p>
+                  ) : null}
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <span>Priority: {task.priority}</span>
+                    {task.dueDate ? <span>Due {format(task.dueDate, 'PP')}</span> : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No tasks linked yet.</p>
+          )}
         </section>
       </CardContent>
     </Card>

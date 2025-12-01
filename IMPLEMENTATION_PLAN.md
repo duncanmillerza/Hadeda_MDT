@@ -44,7 +44,7 @@
 ### Phase 6: Core Components
 - [x] `/src/components/data-table.tsx` - Reusable data table with sorting/filtering
 - [x] `/src/components/patient-row-actions.tsx` - Discuss sheet with meeting add + task/note forms
-- [~] `/src/components/meeting-item-card.tsx` - Agenda card with status/outcome (note/task lists pending)
+- [x] `/src/components/meeting-item-card.tsx` - Agenda card with status/outcome + note/task lists
 - [x] `/src/components/task-form.tsx` - Create/edit task dialog
 - [x] `/src/components/note-editor.tsx` - Note creation form (dialog variant)
 - [x] `/src/components/providers.tsx` - Session & QueryClient providers
@@ -60,7 +60,7 @@
 
 #### Patients
 - [~] `/src/app/patients/page.tsx` - Patient list with search/filter (actions pending)
-- [~] `/src/app/patients/[id]/page.tsx` - Patient detail with tabs (content stubs pending)
+- [x] `/src/app/patients/[id]/page.tsx` - Patient detail with notes/tasks/meetings tabs
   - Notes tab
   - Tasks tab
   - Meetings tab
@@ -165,7 +165,7 @@ Column Mapping:
 2. Scaffold patient, meeting, task, import, and admin pages
 3. Implement remaining client forms (task/note) and integrate server actions
 4. Wire `/api/import` into UI with preview + confirmation flow
-5. Run Prisma migration + seed locally, document verification steps
+5. ✅ Ran Prisma migration + seed locally (documented in README)
 6. Start component/tests scaffolding (Vitest, RTL, API tests)
 
 ---

@@ -39,13 +39,13 @@ GOOGLE_CLIENT_SECRET="your-client-secret"
 
 ```bash
 # Run migration (creates all tables)
-npx prisma migrate dev --name init
+npm run db:migrate
 
-# Generate Prisma Client
-npx prisma generate
-
-# Seed sample data (optional)
+# Seed sample data
 npm run db:seed
+
+# (Optional) generate Prisma client if schema changes
+npx prisma generate
 ```
 
 ---

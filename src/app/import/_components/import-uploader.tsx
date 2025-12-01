@@ -171,7 +171,42 @@ export function ImportUploader() {
                   <Badge variant="secondary">Status: {sheet.status}</Badge>
                   <Badge variant="outline">Rows: {sheet.totalRows}</Badge>
                 </div>
-                <div className="rounded-md border">
+
+                <div className="grid gap-3 md:hidden">
+                  {sheet.rows.length ? (
+                    sheet.rows.map((row, index) => (
+                      <Card key={`${sheet.name}-mobile-${index}`} className="border-border/60">
+                        <CardHeader className="space-y-1">
+                          <CardTitle className="text-base font-semibold leading-tight">
+                            {row.fullName}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2 text-sm text-muted-foreground">
+                          <div className="flex justify-between gap-3">
+                            <span className="font-medium text-foreground">Diagnosis</span>
+                            <span>{row.diagnosis ?? '—'}</span>
+                          </div>
+                          <div className="flex justify-between gap-3">
+                            <span className="font-medium text-foreground">Modality</span>
+                            <span>{row.modality ?? '—'}</span>
+                          </div>
+                          <div className="flex justify-between gap-3">
+                            <span className="font-medium text-foreground">Auth</span>
+                            <span>{row.authLeft ?? '—'}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <Card>
+                      <CardContent className="py-8 text-center text-sm text-muted-foreground">
+                        No sample rows available.
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+
+                <div className="hidden rounded-md border md:block">
                   <Table>
                     <TableHeader>
                       <TableRow>

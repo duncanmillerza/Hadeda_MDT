@@ -5,13 +5,19 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   CalendarCheck2,
-  ClipboardList,
   FileSpreadsheet,
+  Menu,
   ShieldCheck,
   Users2,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 
 interface NavItem {
@@ -23,9 +29,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: '/mdt', label: 'Dashboard', icon: Users2 },
   { href: '/meetings', label: 'Schedules', icon: CalendarCheck2 },
-  { href: '/patients', label: 'Patient Care', icon: ClipboardList },
   { href: '/tasks', label: 'Tasks', icon: ShieldCheck },
-  { href: '/import', label: 'Administration', icon: FileSpreadsheet },
 ]
 
 export function MainNav() {
@@ -33,8 +37,8 @@ export function MainNav() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-[#2D6356] text-white shadow-sm">
-      <div className="container flex h-16 items-center justify-between gap-6 px-4">
-        <Link href="/mdt" className="flex items-center gap-3 text-sm font-semibold tracking-tight text-white">
+      <div className="container flex h-16 w-full items-center gap-4">
+        <Link href="/mdt" className="flex shrink-0 items-center gap-3 text-sm font-semibold tracking-tight text-white">
           <span className="relative h-10 w-[152px]">
             <Image
               src="/wordmark-mono.svg"
@@ -48,32 +52,67 @@ export function MainNav() {
           <span className="text-sm font-medium text-white/80">MDT Platform</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {navItems.map(item => {
-            const Icon = item.icon
-            const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`)
-            return (
-              <Button
-                key={item.href}
-                asChild
-                size="sm"
-                variant="ghost"
-                className={cn(
-                  'h-9 px-3 text-white/80 transition-colors hover:bg-white/15 hover:text-white',
-                  isActive && 'bg-white/25 text-white font-semibold shadow-sm'
-                )}
-              >
-                <Link href={item.href} className="inline-flex items-center gap-2">
-                  <Icon className="h-4 w-4" />
-                  <span>{item.label}</span>
-                </Link>
-              </Button>
-            )
-          })}
-        </nav>
+        <div className="ml-auto hidden items-center gap-2 lg:flex">
+          <nav className="flex items-center gap-1">
+            {navItems.map(item => {
+              const Icon = item.icon
+              const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`)
+              return (
+                <Button
+                  key={item.href}
+                  asChild
+                  size="sm"
+                  variant="ghost"
+                  className={cn(
+                    'h-9 gap-1.5 px-2.5 text-white/80 transition-colors hover:bg-white/15 hover:text-white',
+                    isActive && 'bg-white/25 text-white font-semibold shadow-sm'
+                  )}
+                >
+                  <Link href={item.href} className="inline-flex items-center justify-center gap-2">
+                    <Icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                </Button>
+              )
+            })}
+          </nav>
+          <Button asChild variant="outline" size="sm" className="border-white/30 px-3 text-white hover:bg-white/10">
+            <Link href="/admin/allowlist" className="flex items-center gap-2">
+              <FileSpreadsheet className="h-4 w-4" />
+              Administration
+            </Link>
+          </Button>
+        </div>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <span className="text-xs uppercase tracking-wide text-white/70">Logged in as admin</span>
+        <div className="ml-auto flex items-center gap-2 lg:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/15">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              {[...navItems, { href: '/admin/allowlist', label: 'Administration', icon: FileSpreadsheet }].map(item => {
+                const Icon = item.icon
+                const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`)
+                return (
+                  <DropdownMenuItem key={item.href} asChild>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        'flex items-center gap-2',
+                        isActive && 'font-semibold text-primary'
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  </DropdownMenuItem>
+                )
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

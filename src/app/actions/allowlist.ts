@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 import { auth } from '@/lib/auth'
 import { createAuditLog } from '@/lib/audit-log'
@@ -12,7 +13,7 @@ import {
 
 function assertAdmin(role?: string) {
   if (role !== 'ADMIN') {
-    throw new Error('Admin access required')
+    redirect('/auth/unauthorized')
   }
 }
 
@@ -20,7 +21,9 @@ const ADMIN_PATH = '/admin/allowlist'
 
 export async function listAllowlist() {
   const session = await auth()
-  if (!session?.user) throw new Error('Unauthorized')
+  if (!session?.user) {
+    redirect('/auth/unauthorized')
+  }
   assertAdmin(session.user.role)
 
   return db.clinicianAllowlist.findMany({
@@ -30,7 +33,9 @@ export async function listAllowlist() {
 
 export async function createAllowlistEntry(data: AllowlistFormData) {
   const session = await auth()
-  if (!session?.user) throw new Error('Unauthorized')
+  if (!session?.user) {
+    redirect('/auth/unauthorized')
+  }
   assertAdmin(session.user.role)
 
   const validated = allowlistSchema.parse(data)
@@ -53,7 +58,9 @@ export async function updateAllowlistEntry(
   data: Partial<AllowlistFormData>
 ) {
   const session = await auth()
-  if (!session?.user) throw new Error('Unauthorized')
+  if (!session?.user) {
+    redirect('/auth/unauthorized')
+  }
   assertAdmin(session.user.role)
 
   const parsed = allowlistSchema.partial().parse(data)
@@ -77,7 +84,9 @@ export async function updateAllowlistEntry(
 
 export async function deleteAllowlistEntry(id: string) {
   const session = await auth()
-  if (!session?.user) throw new Error('Unauthorized')
+  if (!session?.user) {
+    redirect('/auth/unauthorized')
+  }
   assertAdmin(session.user.role)
 
   await db.clinicianAllowlist.delete({ where: { id } })

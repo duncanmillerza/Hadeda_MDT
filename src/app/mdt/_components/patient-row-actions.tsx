@@ -5,7 +5,6 @@ import * as React from 'react'
 import type { Patient } from '@prisma/client'
 import { format } from 'date-fns'
 import { CalendarPlus, ClipboardPlus, MessageCircle } from 'lucide-react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
@@ -73,7 +72,12 @@ export function PatientRowActions({ patient, meetings }: PatientRowActionsProps)
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button
+          variant="default"
+          size="sm"
+          className="gap-2"
+          onClick={event => event.stopPropagation()}
+        >
           <MessageCircle className="h-4 w-4" />
           Discuss
         </Button>
@@ -161,15 +165,17 @@ export function PatientRowActions({ patient, meetings }: PatientRowActionsProps)
               <NoteForm
                 patientId={patient.id}
                 trigger={
-                  <Button variant="ghost" size="sm" className="justify-start gap-2 px-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="justify-start gap-2 px-2"
+                    onClick={event => event.stopPropagation()}
+                  >
                     <MessageCircle className="h-4 w-4" />
                     Add note
                   </Button>
                 }
               />
-              <Button asChild variant="ghost" size="sm" className="justify-start">
-                <Link href={`/patients/${patient.id}`}>Open patient record</Link>
-              </Button>
             </div>
           </div>
         </div>

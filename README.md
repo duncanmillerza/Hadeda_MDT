@@ -63,14 +63,14 @@ GOOGLE_CLIENT_SECRET="your-client-secret"
 ### 3. Setup Database
 
 ```bash
-# Run migrations
-npx prisma migrate dev --name init
+# Run migrations (verified)
+npm run db:migrate
 
-# Generate Prisma Client
+# Seed database with sample data
+npm run db:seed
+
+# (Optional) generate Prisma client if you change the schema
 npx prisma generate
-
-# Seed database (optional)
-npx prisma db seed
 ```
 
 ### 4. Add Yourself to Allow-List

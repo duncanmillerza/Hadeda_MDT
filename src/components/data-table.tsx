@@ -36,6 +36,8 @@ interface DataTableProps<TData, TValue> {
   className?: string
   emptyMessage?: React.ReactNode
   renderSubRow?: (row: Row<TData>) => React.ReactNode
+  renderMobileCard?: (row: Row<TData>) => React.ReactNode
+  onRowClick?: (row: Row<TData>) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -46,6 +48,8 @@ export function DataTable<TData, TValue>({
   className,
   emptyMessage = 'No results.',
   renderSubRow,
+  renderMobileCard,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] =
@@ -68,8 +72,22 @@ export function DataTable<TData, TValue>({
 
   const hasFilters = searchKey && table.getColumn(searchKey)
 
+  const rows = table.getRowModel().rows
+
   return (
     <div className={cn('space-y-4', className)}>
+      {renderMobileCard ? (
+        <div className="grid gap-3 md:hidden">
+          {rows.length ? rows.map(row => (
+            <React.Fragment key={row.id}>{renderMobileCard(row)}</React.Fragment>
+          )) : (
+            <div className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
+              {emptyMessage}
+            </div>
+          )}
+        </div>
+      ) : null}
+
       {hasFilters ? (
         <div className="flex items-center justify-between gap-3">
           <Input
@@ -89,34 +107,65 @@ export function DataTable<TData, TValue>({
         </div>
       ) : null}
 
-      <div className="rounded-md border">
-        <Table>
+      <div className="hidden rounded-md border md:block">
+        <Table className="w-full">
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <TableHead key={header.id} className="whitespace-nowrap">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
+                {headerGroup.headers.map(header => {
+                  const meta = header.column.columnDef.meta as
+                    | { headerClassName?: string }
+                    | undefined
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className={cn('whitespace-nowrap', meta?.headerClassName)}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map(row => (
+            {rows?.length ? (
+              rows.map(row => (
                 <React.Fragment key={row.id}>
-                  <TableRow data-state={row.getIsSelected() ? 'selected' : undefined}>
-                    {row.getVisibleCells().map(cell => (
-                      <TableCell key={cell.id} className="align-top">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
+                  <TableRow
+                    data-state={row.getIsSelected() ? 'selected' : undefined}
+                    tabIndex={onRowClick ? 0 : undefined}
+                    onClick={onRowClick ? () => onRowClick(row) : undefined}
+                    onKeyDown={event => {
+                      if (!onRowClick) return
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        onRowClick(row)
+                      }
+                    }}
+                    className={cn(
+                      onRowClick &&
+                        'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+                    )}
+                  >
+                    {row.getVisibleCells().map(cell => {
+                      const meta = cell.column.columnDef.meta as
+                        | { cellClassName?: string }
+                        | undefined
+                      return (
+                        <TableCell
+                          key={cell.id}
+                          className={cn('align-top break-words', meta?.cellClassName)}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      )
+                    })}
                   </TableRow>
                   {renderSubRow ? (
                     <TableRow>

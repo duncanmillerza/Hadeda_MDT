@@ -17,6 +17,7 @@ import {
 } from '@/app/actions/allowlist'
 import { allowlistSchema } from '@/lib/validations/allowlist'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -127,7 +128,52 @@ export function AllowlistTable({ entries }: AllowlistTableProps) {
         </Button>
       </div>
 
-      <div className="overflow-hidden rounded-md border">
+      <div className="grid gap-3 md:hidden">
+        {entries.length ? (
+          entries.map(entry => (
+            <Card key={entry.id} className="border-border/60">
+              <CardHeader className="space-y-2">
+                <CardTitle className="text-base font-semibold">
+                  {entry.email}
+                </CardTitle>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <span>{entry.name ?? 'Unknown clinician'}</span>
+                  <span className="rounded-full bg-secondary/20 px-2 py-0.5 text-xs font-medium uppercase tracking-wide text-secondary-foreground">
+                    {entry.role}
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-1 text-sm text-muted-foreground">
+                <div className="flex justify-between gap-3">
+                  <span className="font-medium text-foreground">Discipline</span>
+                  <span>{entry.discipline ?? '—'}</span>
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-end gap-2">
+                <Button variant="outline" size="sm" onClick={() => handleEdit(entry)}>
+                  Edit
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDelete(entry.id)}
+                  className="text-destructive hover:text-destructive"
+                >
+                  Remove
+                </Button>
+              </CardFooter>
+            </Card>
+          ))
+        ) : (
+          <Card>
+            <CardContent className="py-12 text-center text-sm text-muted-foreground">
+              No authorized clinicians yet.
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      <div className="hidden overflow-hidden rounded-md border md:block">
         <Table>
           <TableHeader>
             <TableRow>

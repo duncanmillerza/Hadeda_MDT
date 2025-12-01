@@ -54,26 +54,20 @@ export const authConfig: NextAuthConfig = {
 
       return true
     },
-    async session({ session }) {
-      if (!session.user?.email) {
-        return session
+    async session({ session, user }) {
+      if (session.user && user) {
+        session.user.id = user.id
+        const dbUser = await db.user.findUnique({
+          where: { id: user.id },
+        })
+
+        if (dbUser) {
+          session.user.role = dbUser.role
+          session.user.discipline = dbUser.discipline
+        } else {
+          throw new Error('User not found in database during session callback.')
+        }
       }
-
-      const dbUser = await db.user.findUnique({
-        where: { email: session.user.email.toLowerCase() },
-        select: {
-          id: true,
-          role: true,
-          discipline: true,
-        },
-      })
-
-      if (dbUser && session.user) {
-        session.user.id = dbUser.id
-        session.user.role = dbUser.role
-        session.user.discipline = dbUser.discipline
-      }
-
       return session
     },
   },
