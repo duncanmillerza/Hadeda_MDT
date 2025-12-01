@@ -73,7 +73,7 @@ export interface ParsedPatient {
   diagnosis?: string
   startDate?: Date
   medicalAid?: string
-  disciplines: string[]
+  disciplines: string // Stored as JSON string for SQLite compatibility
   modality?: string
   authLeft?: string
   status: string
@@ -173,7 +173,7 @@ function parseHeadwaySheet(worksheet: ExcelJS.Worksheet): ParsedPatient[] {
     patients.push({
       fullName: name,
       status: 'HEADWAY',
-      disciplines: [],
+      disciplines: '[]',
     })
   })
 
@@ -226,7 +226,7 @@ function mapRowToPatient(rowData: Record<string, CellValue>, status: string): Pa
   const patient: ParsedPatient = {
     fullName: '',
     status,
-    disciplines: [],
+    disciplines: '[]',
   }
 
   // Map columns to patient fields
@@ -247,7 +247,7 @@ function mapRowToPatient(rowData: Record<string, CellValue>, status: string): Pa
         patient.startDate = parseDate(value) || undefined
         break
       case 'disciplines':
-        patient.disciplines = parseDisciplines(value.toString())
+        patient.disciplines = JSON.stringify(parseDisciplines(value.toString()))
         break
       case 'diagnosis':
         patient.diagnosis = value.toString().trim()

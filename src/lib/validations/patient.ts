@@ -11,7 +11,8 @@ export const patientStatusEnum = z.enum([
   'HEADWAY',
 ])
 
-export const patientSchema = z.object({
+// Schema for form input (accepts array)
+export const patientFormSchema = z.object({
   fullName: z.string().min(1, 'Name is required').max(100),
   age: z.number().int().min(0).max(150).optional().nullable(),
   diagnosis: z.string().max(500).optional().nullable(),
@@ -27,4 +28,11 @@ export const patientSchema = z.object({
   psychology: z.string().max(500).optional().nullable(),
 })
 
-export type PatientFormData = z.infer<typeof patientSchema>
+// Schema for database (transforms array to JSON string)
+export const patientSchema = patientFormSchema.transform((data) => ({
+  ...data,
+  disciplines: JSON.stringify(data.disciplines),
+}))
+
+export type PatientFormData = z.infer<typeof patientFormSchema>
+export type PatientDBData = z.infer<typeof patientSchema>

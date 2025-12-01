@@ -7,6 +7,7 @@ import { format } from 'date-fns'
 import { CalendarPlus, ClipboardPlus, MessageCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { disciplinesToArray } from '@/lib/disciplines-helper'
 
 import { addPatientToMeeting } from '@/app/actions/meetings'
 import { TaskForm } from './forms/task-form'
@@ -47,7 +48,7 @@ export function PatientRowActions({ patient, meetings }: PatientRowActionsProps)
   const [isPending, startTransition] = React.useTransition()
   const router = useRouter()
 
-  const disciplines = (patient.disciplines ?? []).filter(Boolean)
+  const disciplines = disciplinesToArray(patient.disciplines ?? '[]').filter(Boolean)
 
   const handleAddToMeeting = () => {
     if (!selectedMeeting) {
@@ -94,7 +95,7 @@ export function PatientRowActions({ patient, meetings }: PatientRowActionsProps)
           <div>{patient.diagnosis ?? 'No diagnosis captured'}</div>
           <div className="flex flex-wrap gap-2">
             {disciplines.length ? (
-              disciplines.map((discipline, index) => (
+              disciplines.map((discipline: string, index: number) => (
                 <Badge key={`${discipline}-${index}`} variant="secondary">
                   {discipline}
                 </Badge>

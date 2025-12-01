@@ -5,7 +5,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -26,6 +26,7 @@ model User {
   id         String   @id @default(uuid())
   name       String?
   email      String   @unique
+  password   String?  // For standalone local auth
   image      String?
   role       Role     @default(CLINICIAN)
   discipline String?
@@ -59,7 +60,7 @@ model Patient {
   diagnosis          String?
   startDate          DateTime?
   medicalAid         String?
-  disciplines        String[]      @db.Text
+  disciplines        String
   modality           String?
   authLeft           String?
   status             PatientStatus @default(ACTIVE)
@@ -135,7 +136,7 @@ model Note {
   meetingItemId String?
   authorId      String
   category      NoteCategory @default(MDT_FEEDBACK)
-  body          String       @db.Text
+  body          String
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
@@ -161,7 +162,7 @@ model Task {
   patientId     String?
   meetingItemId String?
   title         String
-  description   String?      @db.Text
+  description   String?
   priority      TaskPriority @default(MEDIUM)
   status        TaskStatus   @default(OPEN)
   dueDate       DateTime?
@@ -269,7 +270,7 @@ model Authenticator {
   credentialID       String
   userId             String
   providerAccountId  String
-  credentialPublicKey Bytes
+  credentialPublicKey String
   counter            Int
   credentialDeviceType String
   credentialBackedUp Boolean

@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { DataTable } from '@/components/data-table'
+import { disciplinesToArray } from '@/lib/disciplines-helper'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -136,14 +137,14 @@ export function PatientTable({
           cellClassName: 'hidden 2xl:table-cell',
         },
         cell: ({ row }) => {
-          const disciplines = (row.original.disciplines ?? []).filter(Boolean)
+          const disciplines = disciplinesToArray(row.original.disciplines ?? '[]').filter(Boolean)
           if (!disciplines.length) {
             return <span className="text-sm text-muted-foreground">—</span>
           }
 
           return (
             <div className="flex flex-wrap gap-1">
-              {disciplines.map((discipline, index) => (
+              {disciplines.map((discipline: string, index: number) => (
                 <Badge key={`${discipline}-${index}`} variant="secondary">
                   {discipline}
                 </Badge>

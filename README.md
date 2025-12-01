@@ -2,9 +2,21 @@
 
 A production-ready Multi-Disciplinary Team (MDT) meeting management platform built with Next.js 15, Prisma, and NextAuth.
 
+## 🌟 Standalone Mode
+
+**You are on the `standalone` branch** - this version runs completely offline on your local machine!
+
+### Quick Start (Standalone):
+- **Mac/Linux**: Double-click `start-mdt.sh`
+- **Windows**: Double-click `start-mdt.bat`
+
+See [README_STANDALONE.md](README_STANDALONE.md) for complete standalone documentation.
+
+---
+
 ## Features
 
-- 🔐 **Google OAuth Authentication** with email allow-list enforcement
+- 🔐 **Local Authentication** with email/password (standalone) OR Google OAuth (cloud)
 - 📊 **Patient Management** with 4 status categories (Active, Discharged, Waiting Auth, Headway)
 - 📅 **MDT Meeting Workflows** with agenda items, notes, and task assignment
 - 📝 **Notes & Tasks** with RBAC (Role-Based Access Control)
@@ -12,22 +24,22 @@ A production-ready Multi-Disciplinary Team (MDT) meeting management platform bui
 - 🔍 **Audit Logging** - Complete tracking of all mutations for compliance
 - 🎨 **Design System** - Reuses HadedaHealth design tokens and components
 - ♿ **Accessibility** - WCAG AA compliant with full keyboard navigation
+- 💾 **Offline-First** - All data stored locally, no cloud required
 
-## Tech Stack
+## Tech Stack (Standalone Mode)
 
 - **Framework**: Next.js 15 (App Router) + TypeScript
 - **Styling**: Tailwind CSS + ShadCN/ui components
-- **Database**: PostgreSQL + Prisma ORM
-- **Authentication**: NextAuth v5 (Google OAuth)
+- **Database**: SQLite (local file) + Prisma ORM
+- **Authentication**: NextAuth v5 (Credentials Provider)
 - **Validation**: Zod + react-hook-form
 - **State**: Server Actions + TanStack Query
-- **Testing**: Vitest + Testing Library
+- **Security**: bcrypt password hashing
 
-## Prerequisites
+## Prerequisites (Standalone Mode)
 
 - Node.js 18+ and npm
-- PostgreSQL database
-- Google OAuth credentials ([Get them here](https://console.cloud.google.com/apis/credentials))
+- That's it! No database or OAuth setup needed
 
 ## Getting Started
 
